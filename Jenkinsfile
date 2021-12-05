@@ -11,7 +11,7 @@ tools {
     }
     stage('SonarQube') {
           steps {
-          withSonarQubeEnv('sonar-token'){
+          withSonarQubeEnv('nci-student-accommodation-app'){
           sh 'mvn sonar:sonar'
           }
           }

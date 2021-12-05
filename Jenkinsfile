@@ -24,7 +24,7 @@ node{
     }
     stage('SonarQube Analysis'){
     def mvnHome = tool name: 'maven-3', type: 'maven'
-    withSonarQubeEnv('nci-accommodation-sonar'){
+    withSonarQubeEnv('sonar-token'){
     sh "${mvnHome}/bin/mvn sonar:sonar"
     }
     }

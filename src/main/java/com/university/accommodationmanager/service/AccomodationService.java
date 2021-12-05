@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.university.accommodationmanager.domain.Accomodation;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface AccomodationService {
@@ -13,7 +14,7 @@ public interface AccomodationService {
 	
 	public List<Accomodation> filterRoomates(String column,String value);
 	
-	public void addNewAccomodation(Accomodation Accomodation);
+	public void addNewAccomodation(Accomodation Accomodation, MultipartFile file);
 
 	void updateAvailablity(String accomodationId);
 	

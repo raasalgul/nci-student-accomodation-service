@@ -1,9 +1,12 @@
 package com.university.accommodationmanager.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import com.university.accommodationmanager.repository.AccomodationRepository;
 import com.university.accommodationmanager.service.AccomodationService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -38,8 +42,17 @@ public class AccomodationServiceImpl implements AccomodationService{
 
 
 	@Override
-	public void addNewAccomodation(Accomodation accomodation) {
+	public void addNewAccomodation(Accomodation accomodation, MultipartFile file) {
 		accomodation.setAvailablity(AccomodationConstants.AVAILABLE);
+		Binary binary=null;
+		try {
+			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
+			//accomodation.setPicture(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+		} catch (IOException e) {
+			log.error("error while saving file in accomodation ");
+		}
+		accomodation.setPicture(binary);
+		System.out.println(accomodation);
 		accomodationRepository.save(accomodation);
 	}
 	

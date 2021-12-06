@@ -5,10 +5,16 @@ import org.springframework.stereotype.Repository;
 
 import com.university.accommodationmanager.domain.User;
 
+import java.util.Optional;
+
 
 @Repository
 public interface UserRepository  extends MongoRepository<User,String>{
-	 User findByUsername(String username);
+	Optional<User> findByUsername(String username);
 
 	User findByEmail(String username);
+
+	Boolean existsByUsername(String userName);
+
+	Boolean existsByEmail(String email);
 }

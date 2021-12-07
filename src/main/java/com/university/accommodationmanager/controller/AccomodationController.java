@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.print.attribute.standard.Media;
 
 @RestController
-@RequestMapping("/accomodation")
+@RequestMapping("/nci/accomodation")
 @Slf4j
 @CrossOrigin
 public class AccomodationController {
@@ -39,23 +39,22 @@ public class AccomodationController {
 	}
 	
 		
-	@PostMapping(value = "/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	private ResponseEntity<String> addaccomodation(@RequestPart("accomodation") String accomodation,
+	@PutMapping(value = "/add")
+			//, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	private ResponseEntity<Accomodation> addaccomodation(@RequestPart("accomodation") String accomodation,
 												   @RequestPart("file") MultipartFile file){
 		ObjectMapper mapper = new ObjectMapper();
-	//	Accomodation accomodationObject=null;
-//		try {
-//			 accomodationObject = mapper.readValue(accomodation, Accomodation.class);
-//		} catch (JsonProcessingException e) {
-//			log.error("Error while converting to pojo in add accomdation method "+e);
-//		}
-//		try(Reader reader = new InputStreamReader(accomodation){
 			Gson gson = new GsonBuilder().create();
 			Accomodation accomodationObject = gson.fromJson(accomodation, Accomodation.class);
 			System.out.println(accomodationObject);
-//		}
-		 accomodationService.addNewAccomodation(accomodationObject,file);
-		return new ResponseEntity<String>("Success",HttpStatus.CREATED);
+		Accomodation accomodationReponse= accomodationService.addNewAccomodation(accomodationObject,file);
+		return new ResponseEntity<Accomodation>(accomodationReponse,HttpStatus.CREATED);
+	}
+
+	@GetMapping(value = "/get")
+	private ResponseEntity<Accomodation> getUseraccomodation(){
+		Accomodation accomodation=accomodationService.getUserAccomodation();
+		return new ResponseEntity<Accomodation>(accomodation,HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/filter/{column}/{value}")
@@ -65,10 +64,10 @@ public class AccomodationController {
 		return new ResponseEntity<List<Accomodation>>(accomodationList,HttpStatus.OK);
 	}
 	
-	@PutMapping("/status/{accId}")
-	private  ResponseEntity<String> updateAvailablity(@PathVariable String accId) {
-		log.trace("call to update closed status for room id "+accId);
-		accomodationService.updateAvailablity(accId);
-		return new ResponseEntity<String>("Success",HttpStatus.OK);
-	}
+//	@PutMapping("/status/{accId}")
+//	private  ResponseEntity<String> updateAvailablity(@RequestBody Accomodation accommodation) {
+//		log.trace("call to update accommodation ");
+//		accomodationService.updateAvailablity(accommodation);
+//		return new ResponseEntity<String>("Success",HttpStatus.OK);
+//	}
 }

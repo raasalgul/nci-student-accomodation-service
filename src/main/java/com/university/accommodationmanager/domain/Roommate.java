@@ -2,6 +2,7 @@ package com.university.accommodationmanager.domain;
 
 import java.util.List;
 
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -31,7 +32,7 @@ public class Roommate {
 	
 	private String work;
 	
-	private String picture;
+	private Binary picture;
 	
 	private String budget;
 	

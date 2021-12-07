@@ -1,4 +1,4 @@
-package com.university.accommodationmanager.service.impl;
+package com.university.accommodationmanager.response;
 
 public class MessageResponse {
 	private String message;

@@ -1,10 +1,17 @@
 package com.university.accommodationmanager.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.university.accommodationmanager.domain.User;
+import com.university.accommodationmanager.repository.UserRepository;
+import com.university.accommodationmanager.security.jwt.JwtUtils;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.university.accommodationmanager.constants.AccomodationConstants;
@@ -15,6 +22,9 @@ import com.university.accommodationmanager.repository.RoommateRepository;
 import com.university.accommodationmanager.service.RoommateService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @Slf4j
@@ -22,8 +32,16 @@ public class RoommateServiceImpl implements RoommateService{
 	
 	@Autowired
 	RoommateRepository roommateRepository;
-	
-	
+
+	@Autowired
+	HttpServletRequest request;
+
+	@Autowired
+	private JwtUtils jwtUtils;
+
+	@Autowired
+	private UserRepository repository;
+
 	public List<Roommate> getRoommate() {
 		List<Roommate> roomMateList=roommateRepository.findAllByAvailablity(AccomodationConstants.AVAILABLE);
 		if(roomMateList.isEmpty()) {
@@ -46,7 +64,32 @@ public class RoommateServiceImpl implements RoommateService{
 	}
 
 	@Override
-	public void addNewRoomMate(Roommate roommate) {
+	public Roommate getUserRoomate() {
+		String bearer = request.getHeader("Authorization");
+		bearer = bearer.replace("Bearer ", "");
+		String username = jwtUtils.getUserNameFromJwtToken(bearer);
+		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
+				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
+		return roommateRepository.findByUserId(userInfo.get().getId());
+	}
+
+	@Override
+	public void addNewRoomMate(Roommate roommate, MultipartFile file) {
+		String bearer = request.getHeader("Authorization");
+		bearer = bearer.replace("Bearer ", "");
+		String username = jwtUtils.getUserNameFromJwtToken(bearer);
+		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
+				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
+		roommate.setUserId(userInfo.get().getId());
+		Binary binary=null;
+		try {
+			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
+			//accomodation.setPicture(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+		} catch (IOException e) {
+			log.error("error while saving file in accomodation ");
+		}
+		roommate.setPicture(binary);
+		System.out.println(roommate);
 		roommate.setAvailablity(AccomodationConstants.AVAILABLE);
 		roommateRepository.save(roommate);
 	}

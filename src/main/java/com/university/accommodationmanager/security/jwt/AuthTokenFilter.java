@@ -1,6 +1,6 @@
 package com.university.accommodationmanager.security.jwt;
 
-import com.university.accommodationmanager.service.impl.UserDetailsServiceImpl;
+import com.university.accommodationmanager.security.services.UserDetailsSecurityServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   private JwtUtils jwtUtils;
 
   @Autowired
-  private UserDetailsServiceImpl userDetailsService;
+  private UserDetailsSecurityServiceImpl userDetailsService;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

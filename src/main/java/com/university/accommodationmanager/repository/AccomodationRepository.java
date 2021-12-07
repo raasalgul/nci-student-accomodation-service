@@ -21,4 +21,6 @@ public interface AccomodationRepository extends MongoRepository<Accomodation,Str
 
 	List<Accomodation> findAllByAvailablity(String available);
 
+	Accomodation findByUserId(String value);
+
 }

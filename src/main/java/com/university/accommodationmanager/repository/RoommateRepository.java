@@ -2,6 +2,7 @@ package com.university.accommodationmanager.repository;
 
 import java.util.List;
 
+import com.university.accommodationmanager.domain.Accomodation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import  com.university.accommodationmanager.domain.Roommate;
@@ -18,5 +19,7 @@ public interface RoommateRepository extends MongoRepository<Roommate,String>{
 	List<Roommate> findByEirCode(String value);
 
 	List<Roommate> findAllByAvailablity(String available);
+
+	Roommate findByUserId(String value);
 
 }

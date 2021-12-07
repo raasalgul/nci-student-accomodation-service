@@ -1,4 +1,4 @@
-package com.university.accommodationmanager.service.impl;
+package com.university.accommodationmanager.response;
 
 public class JwtResponse {
 	private String token;

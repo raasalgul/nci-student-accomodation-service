@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.university.accommodationmanager.domain.User;
+import com.university.accommodationmanager.repository.UserRepository;
+//import com.university.accommodationmanager.utility.Utility;
+import com.university.accommodationmanager.security.jwt.JwtUtils;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.university.accommodationmanager.constants.AccomodationConstants;
@@ -21,14 +26,25 @@ import com.university.accommodationmanager.service.AccomodationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 @Slf4j
 public class AccomodationServiceImpl implements AccomodationService{
 	
 	@Autowired
 	AccomodationRepository accomodationRepository;
-	
-	
+
+	@Autowired
+	private UserRepository repository;
+
+	@Autowired
+	HttpServletRequest request;
+
+	@Autowired
+	private JwtUtils jwtUtils;
+
+
 	public List<Accomodation> getAccomodation() {
 		
 		List<Accomodation> AccomodationList=accomodationRepository.findAllByAvailablity(AccomodationConstants.AVAILABLE);
@@ -42,8 +58,14 @@ public class AccomodationServiceImpl implements AccomodationService{
 
 
 	@Override
-	public void addNewAccomodation(Accomodation accomodation, MultipartFile file) {
+	public Accomodation addNewAccomodation(Accomodation accomodation, MultipartFile file) {
 		accomodation.setAvailablity(AccomodationConstants.AVAILABLE);
+		String bearer = request.getHeader("Authorization");
+		bearer = bearer.replace("Bearer ", "");
+		String username = jwtUtils.getUserNameFromJwtToken(bearer);
+		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
+				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
+		accomodation.setUserId(userInfo.get().getId());
 		Binary binary=null;
 		try {
 			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
@@ -53,7 +75,8 @@ public class AccomodationServiceImpl implements AccomodationService{
 		}
 		accomodation.setPicture(binary);
 		System.out.println(accomodation);
-		accomodationRepository.save(accomodation);
+		accomodation=accomodationRepository.save(accomodation);
+		return accomodation;
 	}
 	
 	@Override
@@ -67,6 +90,16 @@ public class AccomodationServiceImpl implements AccomodationService{
 			log.error("No Matching Accomodation data avaialble for accomodation id"+accomodationId);
 			throw new NoRoomMateAvailableException("No Matching Accomodation data avaialble");
 		}
+	}
+
+	@Override
+	public Accomodation getUserAccomodation() {
+		String bearer = request.getHeader("Authorization");
+		bearer = bearer.replace("Bearer ", "");
+		String username = jwtUtils.getUserNameFromJwtToken(bearer);
+		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
+				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
+		return accomodationRepository.findByUserId(userInfo.get().getId());
 	}
 
 

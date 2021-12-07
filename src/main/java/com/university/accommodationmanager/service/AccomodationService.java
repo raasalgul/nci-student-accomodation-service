@@ -14,8 +14,9 @@ public interface AccomodationService {
 	
 	public List<Accomodation> filterRoomates(String column,String value);
 	
-	public void addNewAccomodation(Accomodation Accomodation, MultipartFile file);
+	public Accomodation addNewAccomodation(Accomodation Accomodation, MultipartFile file);
 
 	void updateAvailablity(String accomodationId);
-	
+
+	Accomodation getUserAccomodation();
 }

@@ -1,4 +1,4 @@
-package com.university.accommodationmanager.service.impl;
+package com.university.accommodationmanager.service;
 
 import com.university.accommodationmanager.domain.DatabaseSequence;
 import org.springframework.beans.factory.annotation.Autowired;

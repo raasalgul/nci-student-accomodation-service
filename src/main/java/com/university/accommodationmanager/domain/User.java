@@ -23,6 +23,7 @@ public class User {
 		  private String age;
 		  private String phoneNumber;
 		  private String services;
+		  private String course;
 
 	public User(String email, String encode, String username) {
 		this.email=email;

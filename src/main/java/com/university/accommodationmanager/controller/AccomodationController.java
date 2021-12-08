@@ -40,7 +40,6 @@ public class AccomodationController {
 	
 		
 	@PutMapping(value = "/add")
-			//, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	private ResponseEntity<Accomodation> addaccomodation(@RequestPart("accomodation") String accomodation,
 												   @RequestPart("file") MultipartFile file){
 		ObjectMapper mapper = new ObjectMapper();

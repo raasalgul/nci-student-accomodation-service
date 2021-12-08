@@ -18,8 +18,8 @@ tools {
         }
        stage('Deploy') {
                steps {
-               sh 'sudo nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar & > /home/ubuntu/log.txt 2>&1 &'
-               sh 'sudo echo $! > /home/ubuntu/pid.file'
+               sh 'nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar & '
+               sh 'echo pwd'
                }
              }
     }

@@ -18,7 +18,7 @@ tools {
         }
        stage('Deploy') {
                steps {
-               sh 'java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar'
+               sh 'nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar &'
                }
              }
     }

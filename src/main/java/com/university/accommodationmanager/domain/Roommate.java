@@ -35,5 +35,11 @@ public class Roommate {
 	private Binary picture;
 	
 	private String budget;
+
+	private String description;
+
+	private String name;
+
+	private String age;
 	
 }

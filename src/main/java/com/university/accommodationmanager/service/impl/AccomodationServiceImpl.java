@@ -75,6 +75,8 @@ public class AccomodationServiceImpl implements AccomodationService{
 		}
 		accomodation.setPicture(binary);
 		System.out.println(accomodation);
+		accomodation.setName(userInfo.get().getUsername());
+		accomodation.setAge(userInfo.get().getAge());
 		accomodation=accomodationRepository.save(accomodation);
 		return accomodation;
 	}

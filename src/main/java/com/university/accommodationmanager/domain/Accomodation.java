@@ -37,4 +37,8 @@ public class Accomodation {
 	private String rent;
 	
 	private String description;
+
+	private String name;
+
+	private String age;
 }

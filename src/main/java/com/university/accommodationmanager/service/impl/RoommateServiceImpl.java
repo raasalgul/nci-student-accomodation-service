@@ -109,6 +109,8 @@ public class RoommateServiceImpl implements RoommateService{
 		}
 		roommate.setPicture(binary);
 		System.out.println(roommate);
+		roommate.setName(userInfo.get().getUsername());
+		roommate.setAge(userInfo.get().getAge());
 		roommate=roommateRepository.save(roommate);
 		return roommate;
 	}

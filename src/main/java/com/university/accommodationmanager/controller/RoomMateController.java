@@ -34,21 +34,27 @@ public class RoomMateController {
 		return new ResponseEntity<List<Roommate>>(roommateList,HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	private ResponseEntity<String> addRoommate(@RequestPart("roommate") String roommate,
+	@PutMapping(value = "/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	private ResponseEntity<Roommate> addRoommate(@RequestPart("roommate") String roommate,
 												   @RequestPart("file") MultipartFile file) {
+//		ObjectMapper mapper = new ObjectMapper();
+//		Gson gson = new GsonBuilder().create();
+//		Roommate roommateObject = gson.fromJson(roommate, Roommate.class);
+//		System.out.println(roommateObject);
+//		roommateService.addNewRoomMate(roommateObject, file);
+//		return new ResponseEntity<String>("Success", HttpStatus.CREATED);
 		ObjectMapper mapper = new ObjectMapper();
 		Gson gson = new GsonBuilder().create();
-		Roommate roommateObject = gson.fromJson(roommate, Roommate.class);
-		System.out.println(roommateObject);
-		roommateService.addNewRoomMate(roommateObject, file);
-		return new ResponseEntity<String>("Success", HttpStatus.CREATED);
+		Roommate roomateObject = gson.fromJson(roommate, Roommate.class);
+		System.out.println(roomateObject);
+		Roommate roomateResponse= roommateService.addNewRoomMate(roomateObject,file);
+		return new ResponseEntity<Roommate>(roomateResponse,HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = "/get")
 	private ResponseEntity<Roommate> getUserRoomate(){
-		Roommate accomodation=roommateService.getUserRoomate();
-		return new ResponseEntity<Roommate>(accomodation,HttpStatus.CREATED);
+		Roommate roomate=roommateService.getUserRoomate();
+		return new ResponseEntity<Roommate>(roomate,HttpStatus.CREATED);
 	}
 
 

@@ -20,9 +20,9 @@ public class Roommate {
 	
 	private String userId;
 	
-	private List<String> area;
+	private String area;
 	
-	private List<String> eirCode;
+	private String eirCode;
 	
 	private String duration;
 	

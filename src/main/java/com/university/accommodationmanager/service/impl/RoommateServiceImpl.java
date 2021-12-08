@@ -74,7 +74,26 @@ public class RoommateServiceImpl implements RoommateService{
 	}
 
 	@Override
-	public void addNewRoomMate(Roommate roommate, MultipartFile file) {
+	public Roommate addNewRoomMate(Roommate roommate, MultipartFile file) {
+//		String bearer = request.getHeader("Authorization");
+//		bearer = bearer.replace("Bearer ", "");
+//		String username = jwtUtils.getUserNameFromJwtToken(bearer);
+//		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
+//				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
+//		roommate.setUserId(userInfo.get().getId());
+//		Binary binary=null;
+//		try {
+//			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
+//			//accomodation.setPicture(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+//		} catch (IOException e) {
+//			log.error("error while saving file in accomodation ");
+//		}
+//		roommate.setPicture(binary);
+//		System.out.println(roommate);
+//		roommate.setAvailablity(AccomodationConstants.AVAILABLE);
+//		roommateRepository.save(roommate);
+
+		roommate.setAvailablity(AccomodationConstants.AVAILABLE);
 		String bearer = request.getHeader("Authorization");
 		bearer = bearer.replace("Bearer ", "");
 		String username = jwtUtils.getUserNameFromJwtToken(bearer);
@@ -90,8 +109,8 @@ public class RoommateServiceImpl implements RoommateService{
 		}
 		roommate.setPicture(binary);
 		System.out.println(roommate);
-		roommate.setAvailablity(AccomodationConstants.AVAILABLE);
-		roommateRepository.save(roommate);
+		roommate=roommateRepository.save(roommate);
+		return roommate;
 	}
 
 

@@ -14,7 +14,7 @@ public interface RoommateService {
 	
 	public List<Roommate> filterRoomates(String column,String value);
 	
-	public void addNewRoomMate(Roommate roommate, MultipartFile file);
+	public Roommate addNewRoomMate(Roommate roommate, MultipartFile file);
 
 	public void updateAvailablity(String roomId);
 

@@ -67,9 +67,12 @@ public class UserInfoService {
                 }
             }
             else if(returnUser.getServices().equals(AccomodationConstants.ROOMATE)){
-                Roommate newRoomate=new Roommate();
-                newRoomate.setUserId(returnUser.getId());
-                roommateRepository.save(newRoomate);
+                Roommate newRoomate= roommateRepository.findByUserId(returnUser.getId());
+                if(newRoomate==null) {
+                    newRoomate = new Roommate();
+                    newRoomate.setUserId(returnUser.getId());
+                    roommateRepository.save(newRoomate);
+                }
             }
             return returnUser;
         } else {

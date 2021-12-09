@@ -9,19 +9,29 @@ tools {
         sh 'mvn clean package'
       }
     }
-    stage('SonarQube') {
-          steps {
-          withSonarQubeEnv('nci-student-accommodation-app'){
-          sh 'mvn sonar:sonar'
-          }
-          }
-        }
-       stage('Deploy') {
-               steps {
-               sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar & '
-               sh 'pwd'
-               }
+     stage('Testing') {
+             steps {
+             sh 'mvn test'
              }
+           }
+    stage('SonarQube') {
+  steps {
+  withSonarQubeEnv('nci-student-accommodation-app'){
+  sh 'mvn sonar:sonar'
+  }
+  }
+}
+stage('Deploy') {
+       steps {
+//        sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar & '
+        sh "pid=\$(lsof -i:8089 -t); kill -TERM \$pid "
+                  + "|| kill -KILL \$pid"
+        withEnv(['JENKINS_NODE_COOKIE=dontkill']) {
+        sh 'nohup ./mvnw spring-boot:run -Dserver.port=8089 &'
+               }
+       sh 'pwd'
+       }
+     }
     }
   }
 

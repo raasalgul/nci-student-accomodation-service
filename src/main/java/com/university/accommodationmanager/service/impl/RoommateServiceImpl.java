@@ -108,9 +108,9 @@ public class RoommateServiceImpl implements RoommateService{
 			log.error("error while saving file in accomodation ");
 		}
 		roommate.setPicture(binary);
-		System.out.println(roommate);
 		roommate.setName(userInfo.get().getUsername());
 		roommate.setAge(userInfo.get().getAge());
+		System.out.println(roommate);
 		roommate=roommateRepository.save(roommate);
 		return roommate;
 	}

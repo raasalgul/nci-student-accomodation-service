@@ -33,14 +33,14 @@ public class AccomodationController {
 	
 	
 	@GetMapping("/retrieve")
-	private ResponseEntity<List<Accomodation>> getaccomodation(){
+	public ResponseEntity<List<Accomodation>> getaccomodation(){
 		List<Accomodation> accomodationList=accomodationService.getAccomodation();
 		return new ResponseEntity<List<Accomodation>>(accomodationList,HttpStatus.OK);
 	}
 	
 		
 	@PutMapping(value = "/add")
-	private ResponseEntity<Accomodation> addaccomodation(@RequestPart("accomodation") String accomodation,
+	public ResponseEntity<Accomodation> addaccomodation(@RequestPart("accomodation") String accomodation,
 												   @RequestPart("file") MultipartFile file){
 		ObjectMapper mapper = new ObjectMapper();
 			Gson gson = new GsonBuilder().create();
@@ -51,20 +51,20 @@ public class AccomodationController {
 	}
 
 	@GetMapping(value = "/get")
-	private ResponseEntity<Accomodation> getUseraccomodation(){
+	public ResponseEntity<Accomodation> getUseraccomodation(){
 		Accomodation accomodation=accomodationService.getUserAccomodation();
 		return new ResponseEntity<Accomodation>(accomodation,HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/filter/{column}/{value}")
-	private  ResponseEntity<List<Accomodation>> filteraccomodation(@PathVariable String column,@PathVariable String value) {
+	public  ResponseEntity<List<Accomodation>> filteraccomodation(@PathVariable String column,@PathVariable String value) {
 		log.trace("call to retrieve accomodation for column "+column +" with value"+ value);
 		List<Accomodation> accomodationList=accomodationService.filterRoomates(column, value);
 		return new ResponseEntity<List<Accomodation>>(accomodationList,HttpStatus.OK);
 	}
 	
 //	@PutMapping("/status/{accId}")
-//	private  ResponseEntity<String> updateAvailablity(@RequestBody Accomodation accommodation) {
+//	public  ResponseEntity<String> updateAvailablity(@RequestBody Accomodation accommodation) {
 //		log.trace("call to update accommodation ");
 //		accomodationService.updateAvailablity(accommodation);
 //		return new ResponseEntity<String>("Success",HttpStatus.OK);

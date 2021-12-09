@@ -29,13 +29,13 @@ public class RoomMateController {
 	
 	
 	@GetMapping("/retrieve")
-	private ResponseEntity<List<Roommate>> getRoommate(){
+	public ResponseEntity<List<Roommate>> getRoommate(){
 		List<Roommate> roommateList=roommateService.getRoommate();
 		return new ResponseEntity<List<Roommate>>(roommateList,HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	private ResponseEntity<Roommate> addRoommate(@RequestPart("roommate") String roommate,
+	public ResponseEntity<Roommate> addRoommate(@RequestPart("roommate") String roommate,
 												   @RequestPart("file") MultipartFile file) {
 //		ObjectMapper mapper = new ObjectMapper();
 //		Gson gson = new GsonBuilder().create();
@@ -52,21 +52,21 @@ public class RoomMateController {
 	}
 
 	@GetMapping(value = "/get")
-	private ResponseEntity<Roommate> getUserRoomate(){
+	public ResponseEntity<Roommate> getUserRoomate(){
 		Roommate roomate=roommateService.getUserRoomate();
 		return new ResponseEntity<Roommate>(roomate,HttpStatus.CREATED);
 	}
 
 
 	@GetMapping("/filter/{column}/{value}")
-	private  ResponseEntity<List<Roommate>> filterRoommate(@PathVariable String column,@PathVariable String value) {
+	public  ResponseEntity<List<Roommate>> filterRoommate(@PathVariable String column,@PathVariable String value) {
 		log.trace("call to retrieve room mate for column "+column +" with value"+ value);
 		List<Roommate> roommateList=roommateService.filterRoomates(column, value);
 		return new ResponseEntity<List<Roommate>>(roommateList,HttpStatus.OK);
 	}
 	
 	@PutMapping("/status/{roomId}")
-	private  ResponseEntity<String> updateAvailablity(@PathVariable String roomId) {
+	public  ResponseEntity<String> updateAvailablity(@PathVariable String roomId) {
 		log.trace("call to update closed status for room id "+roomId);
 		roommateService.updateAvailablity(roomId);
 		return new ResponseEntity<String>("Success",HttpStatus.OK);

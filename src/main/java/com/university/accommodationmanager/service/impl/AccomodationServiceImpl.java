@@ -69,18 +69,20 @@ public class AccomodationServiceImpl implements AccomodationService{
 		String username = jwtUtils.getUserNameFromJwtToken(bearer);
 		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
 				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
-		accomodation.setUserId(userInfo.get().getId());
+		if(userInfo.isPresent()){
+			accomodation.setUserId(userInfo.get().getId());
+			accomodation.setName(userInfo.get().getUsername());
+			accomodation.setAge(userInfo.get().getAge());
+		}
+
 		Binary binary=null;
 		try {
 			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
-			//accomodation.setPicture(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
 		} catch (IOException e) {
 			log.error("error while saving file in accomodation ");
 		}
 		accomodation.setPicture(binary);
 		System.out.println(accomodation);
-		accomodation.setName(userInfo.get().getUsername());
-		accomodation.setAge(userInfo.get().getAge());
 		accomodation=accomodationRepository.save(accomodation);
 		return accomodation;
 	}

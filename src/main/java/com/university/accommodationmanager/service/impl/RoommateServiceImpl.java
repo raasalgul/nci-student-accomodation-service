@@ -75,41 +75,24 @@ public class RoommateServiceImpl implements RoommateService{
 
 	@Override
 	public Roommate addNewRoomMate(Roommate roommate, MultipartFile file) {
-//		String bearer = request.getHeader("Authorization");
-//		bearer = bearer.replace("Bearer ", "");
-//		String username = jwtUtils.getUserNameFromJwtToken(bearer);
-//		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
-//				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
-//		roommate.setUserId(userInfo.get().getId());
-//		Binary binary=null;
-//		try {
-//			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
-//			//accomodation.setPicture(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
-//		} catch (IOException e) {
-//			log.error("error while saving file in accomodation ");
-//		}
-//		roommate.setPicture(binary);
-//		System.out.println(roommate);
-//		roommate.setAvailablity(AccomodationConstants.AVAILABLE);
-//		roommateRepository.save(roommate);
-
 		roommate.setAvailablity(AccomodationConstants.AVAILABLE);
 		String bearer = request.getHeader("Authorization");
 		bearer = bearer.replace("Bearer ", "");
 		String username = jwtUtils.getUserNameFromJwtToken(bearer);
 		Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
 				orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
-		roommate.setUserId(userInfo.get().getId());
+		if(userInfo.isPresent()) {
+			roommate.setUserId(userInfo.get().getId());
+			roommate.setName(userInfo.get().getUsername());
+			roommate.setAge(userInfo.get().getAge());
+		}
 		Binary binary=null;
 		try {
 			binary=new Binary(BsonBinarySubType.BINARY, file.getBytes());
-			//accomodation.setPicture(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
 		} catch (IOException e) {
 			log.error("error while saving file in accomodation ");
 		}
 		roommate.setPicture(binary);
-		roommate.setName(userInfo.get().getUsername());
-		roommate.setAge(userInfo.get().getAge());
 		System.out.println(roommate);
 		roommate=roommateRepository.save(roommate);
 		return roommate;

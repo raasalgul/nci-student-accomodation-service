@@ -41,7 +41,13 @@ public class UserInfoService {
         String username = jwtUtils.getUserNameFromJwtToken(bearer);
         Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
                 orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
-        return userInfo.get();
+        User userInfoDetails = new User();
+        if(userInfo.isPresent())
+        {
+            userInfoDetails = userInfo.get();
+            userInfoDetails.setPassword(null);
+        }
+        return userInfoDetails;
     }
 
     public User putUserInfo(User userUpdate) {
@@ -50,7 +56,7 @@ public class UserInfoService {
         String username = jwtUtils.getUserNameFromJwtToken(bearer);
         Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
                 orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
-        Optional<User> user = repository.findById(userInfo.get().getId());
+        Optional<User> user = repository.findById(userInfo.isPresent()?userInfo.get().getId():"");
         if (user.isPresent()) {
             user.get().setAge(userUpdate.getAge());
             user.get().setServices(userUpdate.getServices());

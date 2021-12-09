@@ -24,7 +24,7 @@ tools {
 stage('Deploy') {
        steps {
 //        sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar & '
-        sh "pid=\$(lsof -i:8089 -t); kill -TERM \$pid || kill -KILL \$pid"
+//         sh "pid=\$(lsof -i:8089 -t); kill -TERM \$pid || kill -KILL \$pid"
         withEnv(['JENKINS_NODE_COOKIE=dontkill']) {
         sh 'nohup java -jar target/accommodationmanager-0.0.1-SNAPSHOT.jar &'
                }

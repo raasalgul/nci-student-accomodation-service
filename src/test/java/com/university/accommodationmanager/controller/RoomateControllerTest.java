@@ -1,7 +1,9 @@
 package com.university.accommodationmanager.controller;
 
 import com.university.accommodationmanager.domain.Accomodation;
+import com.university.accommodationmanager.domain.Roommate;
 import com.university.accommodationmanager.service.AccomodationService;
+import com.university.accommodationmanager.service.RoommateService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +21,12 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ControllerTest {
+public class RoomateControllerTest {
 
     @Mock
-    AccomodationService accomodationService;
+    RoommateService roommateService;
     @InjectMocks
-    AccomodationController accomodationController =new AccomodationController();
+    RoomMateController roomMateController =new RoomMateController();
 
     @Before
     public void setUp() {
@@ -32,27 +34,27 @@ public class ControllerTest {
     }
     @Test
     public void getAccomodationTest(){
-        List<Accomodation> mockResponse=new ArrayList<>();
-        Mockito.when(accomodationService.getAccomodation()).thenReturn(mockResponse);
-        ResponseEntity<List<Accomodation>> response = accomodationController.getaccomodation();
+        List<Roommate> mockResponse=new ArrayList<>();
+        Mockito.when(roommateService.getRoommate()).thenReturn(mockResponse);
+        ResponseEntity<List<Roommate>> response = roomMateController.getRoommate();
         assertEquals(mockResponse,response.getBody());
     }
 
     @Test
     public void addAccomodationTest(){
         String accomodation="{\"msg\":\"test\"}";
-        Accomodation mockResponse=new Accomodation();
+        Roommate mockResponse=new Roommate();
         MultipartFile file = null;
-        Mockito.when(accomodationService.addNewAccomodation(Mockito.any(),Mockito.any())).thenReturn(mockResponse);
-        ResponseEntity<Accomodation> response = accomodationController.addaccomodation(accomodation,file);
+        Mockito.when(roommateService.addNewRoomMate(Mockito.any(),Mockito.any())).thenReturn(mockResponse);
+        ResponseEntity<Roommate> response = roomMateController.addRoommate(accomodation,file);
         assertEquals(mockResponse,response.getBody());
     }
 
     @Test
     public void getUseraccomodation1Test(){
-        Accomodation mockResponse=new Accomodation();
-        Mockito.when(accomodationService.getUserAccomodation()).thenReturn(mockResponse);
-        ResponseEntity<Accomodation> response = accomodationController.getUseraccomodation();
+        Roommate mockResponse=new Roommate();
+        Mockito.when(roommateService.getUserRoomate()).thenReturn(mockResponse);
+        ResponseEntity<Roommate> response = roomMateController.getUserRoomate();
         assertEquals(mockResponse,response.getBody());
     }
 

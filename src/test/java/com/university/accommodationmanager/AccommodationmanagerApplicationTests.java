@@ -1,13 +1,13 @@
-package com.university.accommodationmanager;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class AccommodationmanagerApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}
+//package com.university.accommodationmanager;
+//
+//import org.junit.jupiter.api.Test;
+//import org.springframework.boot.test.context.SpringBootTest;
+//
+//@SpringBootTest
+//class AccommodationmanagerApplicationTests {
+//
+//	@Test
+//	void contextLoads() {
+//	}
+//
+//}

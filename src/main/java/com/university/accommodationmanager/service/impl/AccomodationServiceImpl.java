@@ -49,6 +49,10 @@ public class AccomodationServiceImpl implements AccomodationService{
 		
 		List<Accomodation> AccomodationList=accomodationRepository.findAllByAvailablity(AccomodationConstants.AVAILABLE);
 		log.info("Total accomodation size"+AccomodationList.size());
+		AccomodationList.stream().forEach(value->{
+			log.info("Values "+ value);
+		});
+
 		if(AccomodationList.isEmpty()) {
 			log.error("No Data for Accomodation in repo");
 			throw new NoAccomodationAvailableException("No Data for Accomodation in repo");

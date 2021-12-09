@@ -1,16 +1,12 @@
 package com.university.accommodationmanager.controller;
 
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +15,6 @@ import com.university.accommodationmanager.service.AccomodationService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("/nci/accomodation")
@@ -55,18 +49,5 @@ public class AccomodationController {
 		Accomodation accomodation=accomodationService.getUserAccomodation();
 		return new ResponseEntity<Accomodation>(accomodation,HttpStatus.CREATED);
 	}
-	
-	@GetMapping("/filter/{column}/{value}")
-	public  ResponseEntity<List<Accomodation>> filteraccomodation(@PathVariable String column,@PathVariable String value) {
-		log.trace("call to retrieve accomodation for column "+column +" with value"+ value);
-		List<Accomodation> accomodationList=accomodationService.filterRoomates(column, value);
-		return new ResponseEntity<List<Accomodation>>(accomodationList,HttpStatus.OK);
-	}
-	
-//	@PutMapping("/status/{accId}")
-//	public  ResponseEntity<String> updateAvailablity(@RequestBody Accomodation accommodation) {
-//		log.trace("call to update accommodation ");
-//		accomodationService.updateAvailablity(accommodation);
-//		return new ResponseEntity<String>("Success",HttpStatus.OK);
-//	}
+
 }

@@ -111,28 +111,31 @@ public class UserInfoService {
                 orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
         Optional<User> user = repository.findById(userInfo.isPresent()?userInfo.get().getId():"");
         String msgTemplate ="";
+        String senderUserName="",desc="",phnumber="",senderEmail="";
         if(user.isPresent()){
             String userId = user.get().getId();
             String service = user.get().getServices();
+            senderEmail=user.get().getEmail();
+            phnumber= user.get().getPhoneNumber();
+            senderUserName= user.get().getUsername();
             if(service.equals(AccomodationConstants.ACCOMMODATION)){
                 Accomodation accomodation=accomodationRepository.findByUserId(userId);
-                msgTemplate ="Hi, "+user.get().getUsername()+"\n" +
-                        " is interested in your service" +
-                        "Please contact him if you like their following description: \n" +
-                        accomodation.getDescription()+" .\nContact information: "+user.get().getEmail()+" "
-                        +user.get().getPhoneNumber()+"."+
-                        "\nThank You" +
-                        "\nNCI Accommodation";
-                log.info("formatted message is "+msgTemplate);
+                desc=accomodation.getDescription();
             }
             else if(service.equals(AccomodationConstants.ROOMATE)){
                 Roommate roommate=roommateRepository.findByUserId(userId);
-                String.format(msgTemplate, user.get().getUsername(),roommate.getDescription(),
-                        user.get().getEmail(),user.get().getPhoneNumber());
-                log.info("formatted message is "+msgTemplate);
+                desc=roommate.getDescription();
             }
         }
         user= repository.findById(postedUserId);
+        msgTemplate ="Hi, "+user.get().getUsername()+"\n" +
+                senderUserName+" is interested in your service" +
+                "Please contact him if you like their following description: \n" +desc
+                +" .\nContact information: "+senderEmail+" "
+                +phnumber+"."+
+                "\nThank You" +
+                "\nNCI Accommodation";
+        log.info("formatted message is "+msgTemplate);
         String toEmail=user.isPresent()?user.get().getEmail():"";
         Email email = new Email();
         email.setMessage(msgTemplate);

@@ -1,7 +1,10 @@
 package com.university.accommodationmanager.service.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.university.accommodationmanager.constants.AccomodationConstants;
 import com.university.accommodationmanager.domain.Accomodation;
+import com.university.accommodationmanager.domain.Email;
 import com.university.accommodationmanager.domain.Roommate;
 import com.university.accommodationmanager.domain.User;
 import com.university.accommodationmanager.exception.NoRoomMateAvailableException;
@@ -11,8 +14,13 @@ import com.university.accommodationmanager.repository.UserRepository;
 import com.university.accommodationmanager.security.jwt.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -85,5 +93,53 @@ public class UserInfoService {
             log.error("No Matching User data available for room id" + user);
             throw new NoRoomMateAvailableException("No Matching Room Mate data available");
         }
+    }
+
+    public String sendEmail(String postedUserId){
+        final String uri = "https://zcu7syrl1i.execute-api.us-east-1.amazonaws.com/prod";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+//        Gson gson = new GsonBuilder().create();
+//        String json = gson.toJson(email);
+//        JSONObject personJsonObject = new JSONObject(json);
+//        personJsonObject.get(email);
+
+        String bearer = request.getHeader("Authorization");
+        bearer = bearer.replace("Bearer ", "");
+        String username = jwtUtils.getUserNameFromJwtToken(bearer);
+        Optional<User> userInfo = Optional.ofNullable(repository.findByUsername(username).
+                orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username)));
+        Optional<User> user = repository.findById(userInfo.isPresent()?userInfo.get().getId():"");
+        String msgTemplate ="";
+        if(user.isPresent()){
+            String userId = user.get().getId();
+            String service = user.get().getServices();
+            if(service.equals(AccomodationConstants.ACCOMMODATION)){
+                Accomodation accomodation=accomodationRepository.findByUserId(userId);
+                msgTemplate ="Hi, "+user.get().getUsername()+"\n" +
+                        " is interested in your service" +
+                        "Please contact him if you like their following description: \n" +
+                        accomodation.getDescription()+" .\nContact information: "+user.get().getEmail()+" "
+                        +user.get().getPhoneNumber()+"."+
+                        "\nThank You" +
+                        "\nNCI Accommodation";
+                log.info("formatted message is "+msgTemplate);
+            }
+            else if(service.equals(AccomodationConstants.ROOMATE)){
+                Roommate roommate=roommateRepository.findByUserId(userId);
+                String.format(msgTemplate, user.get().getUsername(),roommate.getDescription(),
+                        user.get().getEmail(),user.get().getPhoneNumber());
+                log.info("formatted message is "+msgTemplate);
+            }
+        }
+        user= repository.findById(postedUserId);
+        String toEmail=user.isPresent()?user.get().getEmail():"";
+        Email email = new Email();
+        email.setMessage(msgTemplate);
+        email.setTo(toEmail);
+        email.setSubject("NCI Accommodation Interested");
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.postForObject(uri,email, String.class);
+       return result;
     }
 }

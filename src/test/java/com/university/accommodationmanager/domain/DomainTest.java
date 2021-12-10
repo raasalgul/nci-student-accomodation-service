@@ -1,6 +1,8 @@
 package com.university.accommodationmanager.domain;
 
 import com.university.accommodationmanager.domain.*;
+import com.university.accommodationmanager.response.JwtResponse;
+import com.university.accommodationmanager.response.MessageResponse;
 import org.junit.Test;
 
 import com.openpojo.reflection.PojoClass;
@@ -68,6 +70,19 @@ public class DomainTest {
     @Test
     public void userTest(){
         PojoClass pojoclass=PojoClassFactory.getPojoClass(User.class);
+        Validator validator=ValidatorBuilder
+                .create()
+                .with(new SetterMustExistRule())
+                .with(new GetterMustExistRule())
+                .with(new SetterTester())
+                .with(new GetterTester())
+                .build();
+        validator.validate(pojoclass);
+    }
+
+    @Test
+    public void messageResponseTest(){
+        PojoClass pojoclass=PojoClassFactory.getPojoClass(MessageResponse.class);
         Validator validator=ValidatorBuilder
                 .create()
                 .with(new SetterMustExistRule())
